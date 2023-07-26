@@ -3,7 +3,10 @@ module FillArraysSparseArraysExt
 using SparseArrays
 import Base: convert, kron
 using FillArrays
-using FillArrays: RectDiagonalFill, RectOrDiagonalFill, ZerosVector, ZerosMatrix
+using FillArrays: RectDiagonalFill, RectOrDiagonalFill,
+                    ZerosVector, ZerosMatrix, getindex_value,
+                    SparseKronStyle
+using LinearAlgebra
 
 ##################
 ## Sparse arrays
@@ -52,6 +55,10 @@ function SparseMatrixCSC{Tv,Ti}(R::RectOrDiagonalFill) where {Tv,Ti}
     SparseMatrixCSC{Tv,Ti}(J, size(R))
 end
 
-kron(E1::RectDiagonalFill, E2::RectDiagonalFill) = kron(sparse(E1), sparse(E2))
+FillArrays.KronStyle(A::RectDiagonalFill) = FillArrays.SparseKronStyle()
+
+function FillArrays.maybesparsekron(::SparseKronStyle, ::SparseKronStyle, A, B)
+    kron(sparse(A), sparse(B))
+end
 
 end # module

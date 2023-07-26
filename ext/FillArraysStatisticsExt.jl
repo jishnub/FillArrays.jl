@@ -3,7 +3,9 @@ module FillArraysStatisticsExt
 import Statistics: mean, std, var, cov, cor
 
 using FillArrays
-using FillArrays: AbstractFill, AbstractFillVector, AbstractFillMatrix
+using FillArrays: AbstractFill, AbstractFillVector, AbstractFillMatrix,
+                    getindex_value
+using LinearAlgebra
 
 #########
 # mean, std

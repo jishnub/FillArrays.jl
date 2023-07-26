@@ -467,3 +467,14 @@ function kron(f::AbstractFillVecOrMat, g::AbstractFillVecOrMat)
     sz = _kronsize(f, g)
     _kron(f, g, sz)
 end
+abstract type KronStyle end
+struct SparseKronStyle <: KronStyle end
+struct UnknownKronStyle <: KronStyle end
+KronStyle(A) = UnknownKronStyle()
+kron(A::RectDiagonalFill, B::RectDiagonalFill) =
+    maybesparsekron(KronStyle(A), KronStyle(B), A, B)
+
+function maybesparsekron(::UnknownKronStyle, ::UnknownKronStyle, A::AbstractMatrix, B::AbstractMatrix)
+    invoke(kron, Tuple{AbstractMatrix, AbstractMatrix}, A, B)
+end
+
