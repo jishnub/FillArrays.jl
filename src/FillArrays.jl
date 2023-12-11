@@ -4,7 +4,7 @@ module FillArrays
 using LinearAlgebra
 import Base: size, getindex, setindex!, IndexStyle, checkbounds, convert,
     +, -, *, /, \, diff, sum, cumsum, maximum, minimum, sort, sort!,
-    any, all, axes, isone, iterate, unique, allunique, permutedims, inv,
+    any, all, axes, isone, iszero, iterate, unique, allunique, permutedims, inv,
     copy, vec, setindex!, count, ==, reshape, map, zero,
     show, view, in, mapreduce, one, reverse, promote_op, promote_rule, repeat,
     parent, similar, issorted
@@ -627,6 +627,7 @@ function isone(AF::AbstractFillMatrix)
     n == 1 && return true
     return false
 end
+iszero(AF::AbstractFill) = iszero(getindex_value(AF)) || isempty(AF)
 
 # all(isempty, []) and any(isempty, []) have non-generic behavior.
 # We do not follow it here for Eye(0).
